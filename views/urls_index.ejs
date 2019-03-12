@@ -13,12 +13,12 @@
     <h1>Loop</h1>
 
     <ul>
-      <% templateVars.forEach(function(element) { %>
-        <li><%= element.url %> - <%= element.urlDatabase %></li>
-      <% }); %>
+      <% for (var element in urls) { %>
+        <li><%= element %> - <%= urls[element] %></li>
+      <% }; %> 
     </ul>
 
-    <h2>Shortened URL</h2>
+    <h2>Shortened URL Link</h2>
    
     <a>href='#'</a>
 </body>
