@@ -10,16 +10,16 @@
 </head>
 <body style="font-size:20px; padding:50px;">
     <!-- Add EJS code here -->
-    <h1>Short URL - Long URL</h1>
-
-      
-        <%= shortURL %> - <%= longURL %>
+    <header>
+      <% include ./partials/_header %>
+    </header>
     
-
-    <h2>Shortened URL Link</h2>
-   
-      <a>href='#'</a>
-
+    <p><a href="#">Create New TinyURL</a>
+    
+    <h2>TinyURL for <%= longURL %></h2>
+      
+      <%= shortURL %>
+    </p>
 </body>
 </html>
 
