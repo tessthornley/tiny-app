@@ -8,7 +8,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 
 function generateRandomString() {
-
+  return Math.random().toString(36).substr(2, 6);
 }
 
 var urlDatabase = {
@@ -34,7 +34,9 @@ app.get("/urls/new", (req, res) => {
 });
 
 app.post("/urls", (req, res) => {
-  console.log(req.body);  // Log the POST request body to the console
+  console.log(req.body);   // Log the POST request body to the console
+  urlDatabase[generateRandomString()] = req.body.longURL;                
+  console.log(urlDatabase)
   res.send("Ok");         // Respond with 'Ok' (we will replace this)
 });
 
