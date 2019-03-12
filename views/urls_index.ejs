@@ -10,17 +10,20 @@
 </head>
 <body style="font-size:20px; padding:50px;">
     <!-- Add EJS code here -->
-    <h1>Loop</h1>
+    <header>
+      <% include ./partials/_header %>
+    </header>
+    
+    <a href="#">Create New TinyURL</a>
+    
+    <p><h2>My URLs</h2>
 
     <ul>
       <% for (var element in urls) { %>
-        <li><%= element %> - <%= urls[element] %></li>
+        <li><b><%= element %></b> - <%= urls[element] %></li>
       <% }; %> 
     </ul>
-
-    <h2>Shortened URL Link</h2>
-   
-    <a>href='#'</a>
+    </p>
 </body>
 </html>
 
