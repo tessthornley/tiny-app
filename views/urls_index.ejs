@@ -21,6 +21,7 @@
     <ul>
       <% for (var element in urls) { %>
         <li><b><%= element %></b> - <%= urls[element] %></li>
+        <form method="POST" action="/urls/<%= element %>/delete"><button>Delete</button></form>
       <% }; %> 
     </ul>
     </p>
