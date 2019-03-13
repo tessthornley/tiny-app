@@ -9,7 +9,7 @@ app.set("view engine", "ejs");
 
 function generateRandomString() {
   return Math.random().toString(36).substr(2, 6);
-}
+};
 
 var urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
@@ -34,15 +34,19 @@ app.get("/urls/new", (req, res) => {
 });
 
 app.post("/urls", (req, res) => {
-  var generateShortURL = generateRandomString();
-  urlDatabase[generateShortURL] = req.body.longURL;
-  console.log(urlDatabase);                
+  let generateShortURL = generateRandomString();
+  urlDatabase[generateShortURL] = req.body.longURL;                
   res.redirect(`/urls/${generateShortURL}`);
 });
 
 app.get("/u/:shortURL", (req, res) => {
   const newLongURL = urlDatabase[req.params.shortURL];
   res.redirect(newLongURL);
+});
+
+app.post("/urls/:shortURL/delete", (req, res) => {
+  delete urlDatabase[req.params.shortURL];
+  res.redirect("/urls");
 });
 
 app.get("/urls/:shortURL", (req, res) => {
