@@ -10,15 +10,16 @@
 </head>
 <body style="font-size:20px; padding:50px;">
     <!-- Add EJS code here -->
-    <header>
-      <% include ./partials/_header %>
-    </header>
-    
+   
+    <% include ./partials/_header %>
+
     <p><a href="#">Create New TinyURL</a>
     
-    <h2>TinyURL for <%= longURL %></h2>
+    <h2>ShortURL: <b><%= shortURL %></b></h2>
       
-      <%= shortURL %>
+      <form method="POST" action="/urls/<%= shortURL %>">
+      <input type="text" class="form-control" name="longURL" value="<%= longURL %>" size="35"/><button type="submit" class="btn btn-primary">Update</button>
+      </form>
     </p>
 </body>
 </html>
