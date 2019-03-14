@@ -3,12 +3,16 @@
 <% if(username){ %>
 <label>Logged In As: <%=username%></label>
   <form method="POST" action="/logout">
-    <br><button type="submit" class="btn btn-primary">Logout</button>
+    <div class="form-group">
+      <input type="submit" class="btn btn-primary" value="Logout"/>
+    </div>
   </form>
 <% } else{ %>  
   <form method="POST" action="/login">
-    <label for="username">Username:</label>
-    <input type="text" class="form-control" name="username"/>
-    <br><button type="submit" class="btn btn-primary">Submit</button>
+    <div class="form-group">
+      <label for="username">Username:</label>
+      <input type="text" class="form-control" name="username"/>
+      <input type="submit" class="btn btn-primary" value="Submit"/>
+    </div>
   </form>
 <% } %>

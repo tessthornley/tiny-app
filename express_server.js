@@ -26,6 +26,14 @@ const users = {
   }
 };
 
+function emailLookup(newEmail) {
+  for (var id in users) {
+    if (newEmail === users[id].email) {
+      return users[id].email;
+    }
+  }
+};
+
 var urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
@@ -39,11 +47,17 @@ app.get("/register", (req, res) => {
   res.render("urls_register");
 });
 
-app.post("/register", (req, res) => {
+app.post("/register", (req, res,) => {
   const generateUserId = generateRandomString();
-  users[generateUserId] = { id: generateUserId, email: req.body.email, password: req.body.password };
-  res.cookie("user_id", generateUserId);
-  res.redirect("/urls");
+  const databaseEmail = emailLookup(req.body.email);
+  if (!req.body.email || !req.body.password || databaseEmail === req.body.email) {
+    res.send("Status Code 400");
+    return;
+  } else {
+    users[generateUserId] = { id: generateUserId, email: req.body.email, password: req.body.password };
+    res.cookie("user_id", generateUserId);
+    res.redirect("/urls");
+  };
 });
 
 app.post("/login", (req, res) => {

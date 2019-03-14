@@ -18,8 +18,10 @@
     <h2>ShortURL: <b><%= shortURL %></b></h2>
       
       <form method="POST" action="/urls/<%= shortURL %>">
-      <input type="text" class="form-control" name="longURL" value="<%= longURL %>" size="35"/>
-      <br><button type="submit" class="btn btn-primary">Update</button>
+        <div class="form-group"></div>
+          <input type="text" class="form-control" name="longURL" value="<%= longURL %>" size="35"/>
+          <input type="submit" class="btn btn-primary" value="Update"/>
+        </div>
       </form>
     </p>
 </body>
