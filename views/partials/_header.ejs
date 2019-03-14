@@ -1,18 +1,14 @@
 <h1>Tiny App</h1>
 
-<% if(username){ %>
-<label>Logged In As: <%=username%></label>
+<% if(user){ %>
+<label>Logged In As: <%= user.email %></label>
   <form method="POST" action="/logout">
     <div class="form-group">
       <input type="submit" class="btn btn-primary" value="Logout"/>
     </div>
   </form>
 <% } else{ %>  
-  <form method="POST" action="/login">
-    <div class="form-group">
-      <label for="username">Username:</label>
-      <input type="text" class="form-control" name="username"/>
-      <input type="submit" class="btn btn-primary" value="Submit"/>
-    </div>
-  </form>
+  <div>
+    <p><a href="/login">Login</a> | <a href="/register">Register</a></p>
+ </div>
 <% } %>

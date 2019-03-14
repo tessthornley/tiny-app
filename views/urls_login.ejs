@@ -12,9 +12,10 @@
     <!-- Add EJS code here -->
     
     <% include ./partials/_header %>
-  
-    <h2>Create Account</h2>
-    <form method="POST" action="/register">
+
+    <h2>Login</h2>
+
+    <form method="POST" action="/login">
       <div class="form-group">
         <label for="email">Email:</label>
         <input type="email" class="form-control" placeholder="Enter Email Here" name="email"/>
@@ -24,8 +25,9 @@
         <label for="password">Password:</label>
         <input type="password" class="form-control" placeholder="Enter Password Here" name="password"/>
       </div>
-      
-      <input type="submit" class="btn btn-primary" value="Register"/>
+
+      <input type="submit" class="btn btn-primary" value="Login"/>
+
     </form>
 </body>
 </html>
