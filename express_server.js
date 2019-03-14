@@ -13,6 +13,19 @@ function generateRandomString() {
   return Math.random().toString(36).substr(2, 6);
 };
 
+const users = { 
+  "userRandomID": {
+    id: "userRandomID", 
+    email: "user@example.com", 
+    password: "purple-monkey-dinosaur"
+  },
+ "user2RandomID": {
+    id: "user2RandomID", 
+    email: "user2@example.com", 
+    password: "dishwasher-funk"
+  }
+};
+
 var urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
@@ -20,6 +33,17 @@ var urlDatabase = {
 
 app.get("/", (req, res) => {
   res.send("Hello!");
+});
+
+app.get("/register", (req, res) => {
+  res.render("urls_register");
+});
+
+app.post("/register", (req, res) => {
+  const generateUserId = generateRandomString();
+  users[generateUserId] = { id: generateUserId, email: req.body.email, password: req.body.password };
+  res.cookie("user_id", generateUserId);
+  res.redirect("/urls");
 });
 
 app.post("/login", (req, res) => {
