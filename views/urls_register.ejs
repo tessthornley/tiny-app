@@ -10,18 +10,14 @@
 </head>
 <body style="font-size:20px; padding:50px;">
     <!-- Add EJS code here -->
-   
-    <% include ./partials/_header %>
-
-    <p><a href="#">Create New TinyURL</a>
-    
-    <h2>ShortURL: <b><%= shortURL %></b></h2>
-      
-      <form method="POST" action="/urls/<%= shortURL %>">
-      <input type="text" class="form-control" name="longURL" value="<%= longURL %>" size="35"/>
-      <br><button type="submit" class="btn btn-primary">Update</button>
-      </form>
-    </p>
+    <h1>TinyApp</h1>
+    <h2>Create Account</h2>
+    <form method="POST" action="/register">
+      <label for="email">Email:</label>
+      <br><input type="email" class="form-control" name="email"/>
+      <label for="password">Password:</label>
+      <br><input type="password" class="form-control" name="password"/>
+      <br><button type="submit" class="btn btn-primary">Register</button>
+    </form>
 </body>
 </html>
-
