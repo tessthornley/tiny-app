@@ -148,7 +148,7 @@ app.get("/urls/new", (req, res) => {
 });
 
 app.get("/u/:shortURL", (req, res) => {
-  const newLongURL = urlDatabase[req.params.shortURL];
+  const newLongURL = urlDatabase[req.params.shortURL].longURL;
   res.redirect(newLongURL);
 });
 
@@ -160,7 +160,7 @@ app.get("/urls/:shortURL", (req, res) => {
 app.post("/urls/:shortURL", (req, res) => {
   const editMatch = cookieLookup(req.session.user_id);
     if (req.session.user_id === editMatch) {
-      urlDatabase[req.params.shortURL] = req.body.longURL;
+      urlDatabase[req.params.shortURL].longURL = req.body.longURL;
       res.redirect("/urls");
     } else {
       res.send("Only URLs belonging to a User Can be Deleted.");
