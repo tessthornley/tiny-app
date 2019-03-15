@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 var express = require("express");
-var cookieSession = require('cookie-session')
+var cookieSession = require('cookie-session');
 var app = express();
 
 app.use(cookieSession({
@@ -61,7 +61,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/register", (req, res) => {
-  let templateVars = { user: users[res.session.user_id] };
+  let templateVars = { user: users[req.session.user_id] };
   res.render("urls_register", templateVars);
 });
 
@@ -77,13 +77,13 @@ app.post("/register", (req, res) => {
     return;
   } else {
     users[generateUserId] = { id: generateUserId, email: req.body.email, password: hashedPassword };
-    res.session.user_id = generateUserId;
+    req.session.user_id = generateUserId;
     res.redirect("/urls");
   }
 });
 
 app.get("/login", (req, res) => {
-  let templateVars = { user: users[res.session.user_id] };
+  let templateVars = { user: users[req.session.user_id] };
   res.render("urls_login", templateVars);
 });
 
@@ -100,13 +100,13 @@ app.post("/login", (req, res) => {
     res.send("Status Code 403");
   } else {
     console.log("----->", hashedPassword, "----->", user.password);
-    res.session.user_id = user.id;
+    req.session.user_id = user.id;
     res.redirect("/urls");   
   }
 });
 
 app.post("/logout", (req, res) => {
-  res.clearCookie("user_id");
+  req.session = null;
   res.redirect("/urls");
 });
 
@@ -126,15 +126,15 @@ function urlsForUser(id) {
 }
 
 app.get("/urls", (req, res) => {
-  let templateVars = { urls: urlDatabase, user: users[res.session.user_id], usersURLs: urlsForUser(req.cookies["user_id"])};
+  let templateVars = { urls: urlDatabase, user: users[req.session.user_id], usersURLs: urlsForUser(req.session.user_id)};
   res.render("urls_index", templateVars);
 });
 
 app.post("/urls", (req, res) => {
   const generateShortURL = generateRandomString();
   // const cookieChecker = cookieLookup(req.cookies["user_id"]);
-  if (req.cookies["user_id"] /* && req.cookies["users_id"] === cookieChecker*/) {
-    urlDatabase[generateShortURL] = { longURL: req.body.longURL, userID: res.session.user_id };                
+  if (req.session.user_id /* && req.cookies["users_id"] === cookieChecker*/) {
+    urlDatabase[generateShortURL] = { longURL: req.body.longURL, userID: req.session.user_id };                
     console.log(urlDatabase);
     res.redirect(`/urls/${generateShortURL}`);
   } else {
@@ -143,7 +143,7 @@ app.post("/urls", (req, res) => {
 });
 
 app.get("/urls/new", (req, res) => {
-  let templateVars = { urls: urlDatabase, user: users[res.session.user_id] };
+  let templateVars = { urls: urlDatabase, user: users[req.session.user_id] };
   res.render("urls_new", templateVars);
 });
 
@@ -153,13 +153,13 @@ app.get("/u/:shortURL", (req, res) => {
 });
 
 app.get("/urls/:shortURL", (req, res) => {
-  let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL].longURL, user: res.session.user_id, usersURLs: urlsForUser(req.cookies["user_id"]) };
+  let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL].longURL, user: req.session.user_id, usersURLs: urlsForUser(req.session.user_id) };
   res.render("urls_show", templateVars);
 });
 
 app.post("/urls/:shortURL", (req, res) => {
-  const editMatch = cookieLookup(req.cookies["user_id"]);
-    if (req.cookies["user_id"] === editMatch) {
+  const editMatch = cookieLookup(req.session.user_id);
+    if (req.session.user_id === editMatch) {
       urlDatabase[req.params.shortURL] = req.body.longURL;
       res.redirect("/urls");
     } else {
@@ -168,8 +168,8 @@ app.post("/urls/:shortURL", (req, res) => {
 });
 
 app.post("/urls/:shortURL/delete", (req, res) => {
-  const deleteMatch = cookieLookup(req.cookies["user_id"]);
-  if (req.cookies["user_id"] === deleteMatch) {
+  const deleteMatch = cookieLookup(req.session.user_id);
+  if (req.session.user_id === deleteMatch) {
     delete urlDatabase[req.params.shortURL];
     res.redirect("/urls");
   } else {
