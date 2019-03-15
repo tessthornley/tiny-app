@@ -74,6 +74,7 @@ app.post("/register", (req, res) => {
 
 app.get("/login", (req, res) => {
   let templateVars = { user: users[req.cookies["user_id"]] };
+  console.log("---->", req.cookies["user_id"], "---->", users)
   res.render("urls_login", templateVars);
 });
 
@@ -119,9 +120,8 @@ app.get("/urls", (req, res) => {
 
 app.post("/urls", (req, res) => {
   const generateShortURL = generateRandomString();
-  const cookieChecker = cookieLookup(eq.cookies["user_id"]);
-  //see if cookie matches id in database
-  if (req.cookies["user_id"] && req.cookies["users_id"] === cookieChecker) {
+  // const cookieChecker = cookieLookup(req.cookies["user_id"]);
+  if (req.cookies["user_id"] /* && req.cookies["users_id"] === cookieChecker*/) {
     urlDatabase[generateShortURL] = { longURL: req.body.longURL, userID: req.cookies["user_id"] };                
     res.redirect(`/urls/${generateShortURL}`);
   } else {
@@ -140,7 +140,7 @@ app.get("/u/:shortURL", (req, res) => {
 });
 
 app.get("/urls/:shortURL", (req, res) => {
-  let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL].longURL, userID: req.cookies["user_id"], user: users[req.cookies["user_id"]] };
+  let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL].longURL, user: req.cookies["user_id"], usersURLs: urlsForUser(req.cookies["user_id"]) };
   res.render("urls_show", templateVars);
 });
 
@@ -157,8 +157,6 @@ app.post("/urls/:shortURL", (req, res) => {
 
 app.post("/urls/:shortURL/delete", (req, res) => {
   const deleteMatch = cookieLookup(req.cookies["user_id"]);
-  // console.log(users);
-  // console.log("----->", deleteMatch, "------>", req.cookies["user_id"]);
   if (req.cookies["user_id"] === deleteMatch) {
     delete urlDatabase[req.params.shortURL];
     res.redirect("/urls");

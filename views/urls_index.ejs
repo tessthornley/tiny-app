@@ -13,24 +13,25 @@
    
     <% include ./partials/_header %>
     
-    <a href="#">Create New TinyURL</a>
+    <a href="/urls/new">Create New TinyURL</a>
     
     <p><h2>My URLs</h2>
 
     <ul>
         <% if (!user) { %>
           <div>URLs cannot be displayed unless users are logged in.  Please log in or register to continue.</div>
-          <% } %>
-      <% for (var element in usersURLs) { %>
-        <div>
-        <li><b><%= element %></b> - <a href="<%= usersURLs[element].longURL %>"><%= usersURLs[element].longURL %></a></li>
-        <form method="POST" action="/urls/<%= element %>/delete">
-          <div class="form-group">
-            <a href="/urls/<%= element %>">Edit</a><input type="submit" class="btn btn-primary" value="Delete"/>
+        <% } else { %> 
+          <% for (var element in usersURLs) { %>
+            <div>
+            <li><b><%= element %></b> - <a href="<%= usersURLs[element].longURL %>"><%= usersURLs[element].longURL %></a></li>
+            <form method="POST" action="/urls/<%= element %>/delete">
+            <div class="form-group">
+                <a href="/urls/<%= element %>">Edit</a><input type="submit" class="btn btn-primary" value="Delete"/>
+              </div>
+            </form>
           </div>
-        </form>
-        </div>
-      <% }; %> 
+          <% }; %>
+        <% } %> 
     </ul>
     </p>
 </body>
