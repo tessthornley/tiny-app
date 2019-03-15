@@ -1,3 +1,4 @@
+const bcrypt = require('bcrypt');
 var express = require("express");
 var cookieParser = require('cookie-parser');
 var app = express();
@@ -58,15 +59,18 @@ app.get("/register", (req, res) => {
   res.render("urls_register", templateVars);
 });
 
+//const hashedPassword = bcrypt.hashSync(password, 10);
 app.post("/register", (req, res) => {
   const generateUserId = generateRandomString();
   const user = userLookup(req.body.email);
+  const password = req.body.password;
+  const hashedPassword = bcrypt.hashSync(password, 10);
 
   if (!req.body.email || !req.body.password || user) {
     res.send("Status Code 400");
     return;
   } else {
-    users[generateUserId] = { id: generateUserId, email: req.body.email, password: req.body.password };
+    users[generateUserId] = { id: generateUserId, email: req.body.email, password: hashedPassword };
     res.cookie("user_id", generateUserId);
     res.redirect("/urls");
   }
@@ -74,20 +78,22 @@ app.post("/register", (req, res) => {
 
 app.get("/login", (req, res) => {
   let templateVars = { user: users[req.cookies["user_id"]] };
-  console.log("---->", req.cookies["user_id"], "---->", users)
   res.render("urls_login", templateVars);
 });
 
 app.post("/login", (req, res) => {
   const user = userLookup(req.body.email);
+  const password = req.body.password;
+  const hashedPassword = bcrypt.hashSync(password, 10);
   if (!user) {
     res.send("Status Code 403");
     return;
-  } 
+  }
 
-  if (req.body.email === user.email && req.body.password !== user.password) {
+  if (req.body.email === user.email && !bcrypt.compareSync(req.body.password, hashedPassword)) {
     res.send("Status Code 403");
   } else {
+    console.log("----->", hashedPassword, "----->", user.password);
     res.cookie("user_id", user.id);
     res.redirect("/urls");   
   }
@@ -123,6 +129,7 @@ app.post("/urls", (req, res) => {
   // const cookieChecker = cookieLookup(req.cookies["user_id"]);
   if (req.cookies["user_id"] /* && req.cookies["users_id"] === cookieChecker*/) {
     urlDatabase[generateShortURL] = { longURL: req.body.longURL, userID: req.cookies["user_id"] };                
+    console.log(urlDatabase);
     res.redirect(`/urls/${generateShortURL}`);
   } else {
     res.redirect("/login");
@@ -148,7 +155,6 @@ app.post("/urls/:shortURL", (req, res) => {
   const editMatch = cookieLookup(req.cookies["user_id"]);
     if (req.cookies["user_id"] === editMatch) {
       urlDatabase[req.params.shortURL] = req.body.longURL;
-      console.log(req.body.longURL);
       res.redirect("/urls");
     } else {
       res.send("Only URLs belonging to a User Can be Deleted.");
