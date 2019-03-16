@@ -8,12 +8,14 @@ const PORT = 8080; // default port 8080
 
 const app = express();
 
+//session cookie details
 app.use(cookieSession({
   name: 'session',
   keys: ["1234asdf"],
   maxAge: 24 * 60 * 60 * 1000 // 24 hours
-}))
+}));
 
+//bodyParser used to extract body of request stream
 app.use(bodyParser.urlencoded({extended: true}));
 
 // EJS templating language used to render routes
@@ -45,7 +47,7 @@ let urlDatabase = {
 //FUNCTIONS FOR PROJECT//
 const generateRandomString = function generateRandomStringtoUseForShortURL() {
   return Math.random().toString(36).substr(2, 6);
-}
+};
 
 const userLookup = function lookUpUserAndReturnFullProfile (loginEmail) {
   for (var id in users) {
