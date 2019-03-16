@@ -13,26 +13,26 @@
    
     <% include ./partials/_header %>
     
-    <form method="GET" action="/urls/new">
-      <div class="form-group">
-        <input type="submit" class="btn btn-primary" value="Create a New Short Link"/>
-      </div>
-    </form>
+      <form method="GET" action="/urls/new">
+        <div class="form-group">
+          <input type="submit" class="btn btn-primary" value="Create a New Short Link"/>
+        </div>
+      </form>
     
     <p><h2>My URLs</h2>
 
     <ul>
-        <% if (!user) { %>
-          <div>URLs cannot be displayed unless users are logged in.  Please log in or register to continue.</div>
-        <% } else { %> 
-          <% for (var element in usersURLs) { %>
-            <div>
-            <li><b><%= element %></b> - <a href="<%= usersURLs[element].longURL %>"><%= usersURLs[element].longURL %></a></li>
-            <form method="POST" action="/urls/<%= element %>/delete">
-              <div class="form-group">
-                <input type="submit" class="btn btn-primary" value="Delete"/>
-              </div>
-            </form>
+      <% if (!user) { %>
+        <div>URLs cannot be displayed unless users are logged in.  Please log in or register to continue.</div>
+      <% } else { %> 
+      <% for (var element in usersURLs) { %>
+        <div>
+          <li><b><%= element %></b> - <a href="<%= usersURLs[element].longURL %>"><%= usersURLs[element].longURL %></a></li>
+          <form method="POST" action="/urls/<%= element %>/delete">
+            <div class="form-group">
+              <input type="submit" class="btn btn-primary" value="Delete"/>
+            </div>
+          </form>
           <form method="GET" action="/urls/<%= element %>">
             <div class="form-group">
               <input type="submit" class="btn btn-primary" value="Edit"/>
