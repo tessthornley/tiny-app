@@ -24,7 +24,9 @@
     <ul>
       <% if (!user) { %>
         <div>URLs cannot be displayed unless users are logged in.  Please log in or register to continue.</div>
+      
       <% } else { %> 
+      
       <% for (var element in usersURLs) { %>
         <div>
           <li><b><%= element %></b> - <a href="<%= usersURLs[element].longURL %>"><%= usersURLs[element].longURL %></a></li>

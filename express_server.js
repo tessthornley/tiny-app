@@ -109,9 +109,9 @@ app.post("/register", (req, res) => {
     res.send("Status Code 400");
     return;
   } else {
-    users[generateUserId] = { id: generateUserId, email: req.body.email, password: hashedPassword };
+    users[generateUserId] = { id: generateUserId, 
+      email: req.body.email, password: hashedPassword };
     req.session.user_id = generateUserId;
-    console.log("cookie----->", req.session.user_id);
     res.redirect("/urls");
     return;
   }
@@ -158,7 +158,9 @@ app.post("/logout", (req, res) => {
 //values on EJS template are populated based on filtered results from urlsForUser function
 //conditions are included in EJS template such that a user will only be able to view URLs they have created, otherwise will see message prompting them to login or register
 app.get("/urls", (req, res) => {
-  let templateVars = { urls: urlDatabase, user: users[req.session.user_id], usersURLs: urlsForUser(req.session.user_id)};
+  let templateVars = { urls: urlDatabase, 
+    user: users[req.session.user_id], 
+    usersURLs: urlsForUser(req.session.user_id)};
   res.render("urls_index", templateVars);
 });
 
@@ -170,8 +172,8 @@ app.post("/urls", (req, res) => {
   let generateShortURL = generateRandomString();
   let cookieChecker = cookieLookup(req.session.user_id);
   if (req.session.user_id === cookieChecker && req.session.user_id) {
-    urlDatabase[generateShortURL] = { longURL: req.body.longURL, userID: req.session.user_id };                
-    console.log("urlDatabase ----->", urlDatabase)
+    urlDatabase[generateShortURL] = { longURL: req.body.longURL, 
+      userID: req.session.user_id };                
     res.redirect(`/urls/${generateShortURL}`);
   } else {
     res.redirect("/login");
@@ -181,7 +183,8 @@ app.post("/urls", (req, res) => {
 //displays form to add a new URL, directed from the Create a New Short Link button on the main urls page
 //form will POST back to /urls, and if user is logged in will add URL, otherwise will direct to login
 app.get("/urls/new", (req, res) => {
-  let templateVars = { urls: urlDatabase, user: users[req.session.user_id] };
+  let templateVars = { urls: urlDatabase, 
+    user: users[req.session.user_id] };
   res.render("urls_new", templateVars);
 });
 
@@ -193,7 +196,10 @@ app.get("/u/:shortURL", (req, res) => {
 
 //displays page that contains users shortURL and longURL, as well as a button to edit the longURL
 app.get("/urls/:shortURL", (req, res) => {
-  let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL].longURL, user: users[req.session.user_id], cookieId: req.session.user_id, ownerId: urlDatabase[req.params.shortURL].id };
+  let templateVars = { shortURL: req.params.shortURL, 
+    longURL: urlDatabase[req.params.shortURL].longURL, 
+    user: users[req.session.user_id], cookieId: req.session.user_id, 
+    ownerId: urlDatabase[req.params.shortURL].userID };
   res.render("urls_show", templateVars);
 });
 
