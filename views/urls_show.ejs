@@ -15,7 +15,7 @@
 
     <p><a href="/urls/new">Create New TinyURL</a>
      
-      <% if (!cookieId) { %>
+      <% if (!cookieId || cookieId !== ownerId) { %>
         
       <div>URLs will only be displayed to users who created them.  Please log in or register to continue.</div>
         

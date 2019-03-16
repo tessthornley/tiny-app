@@ -111,6 +111,7 @@ app.post("/register", (req, res) => {
   } else {
     users[generateUserId] = { id: generateUserId, email: req.body.email, password: hashedPassword };
     req.session.user_id = generateUserId;
+    console.log("cookie----->", req.session.user_id);
     res.redirect("/urls");
     return;
   }
@@ -170,6 +171,7 @@ app.post("/urls", (req, res) => {
   let cookieChecker = cookieLookup(req.session.user_id);
   if (req.session.user_id === cookieChecker && req.session.user_id) {
     urlDatabase[generateShortURL] = { longURL: req.body.longURL, userID: req.session.user_id };                
+    console.log("urlDatabase ----->", urlDatabase)
     res.redirect(`/urls/${generateShortURL}`);
   } else {
     res.redirect("/login");
