@@ -15,8 +15,10 @@
 
     <p><a href="/urls/new">Create New TinyURL</a>
      
-      <% if (!user) { %>
-        <div>URLs cannot be displayed unless users are logged in.  Please log in or register to continue.</div>
+      <% if (!cookieId) { %>
+        
+        <div>URLs will only be displayed to users who created them.  Please log in or register to continue.</div>
+        
         <% } else { %>
     
           <h2>ShortURL: <b><%= shortURL %></b></h2>

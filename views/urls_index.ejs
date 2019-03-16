@@ -13,7 +13,11 @@
    
     <% include ./partials/_header %>
     
-    <a href="/urls/new">Create New TinyURL</a>
+    <form method="GET" action="/urls/new">
+      <div class="form-group">
+        <input type="submit" class="btn btn-primary" value="Create a New Short Link"/>
+      </div>
+    </form>
     
     <p><h2>My URLs</h2>
 
@@ -25,8 +29,13 @@
             <div>
             <li><b><%= element %></b> - <a href="<%= usersURLs[element].longURL %>"><%= usersURLs[element].longURL %></a></li>
             <form method="POST" action="/urls/<%= element %>/delete">
+              <div class="form-group">
+                <input type="submit" class="btn btn-primary" value="Delete"/>
+              </div>
+            </form>
+          <form method="GET" action="/urls/<%= element %>">
             <div class="form-group">
-                <a href="/urls/<%= element %>">Edit</a><input type="submit" class="btn btn-primary" value="Delete"/>
+              <input type="submit" class="btn btn-primary" value="Edit"/>
               </div>
             </form>
           </div>
