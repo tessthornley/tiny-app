@@ -107,15 +107,15 @@ app.post("/register", (req, res) => {
   let newPassword = req.body.password;
   let hashedPassword = bcrypt.hashSync(newPassword, 10);
 
-  if (!req.body.email || !req.body.password || user) {
-    res.send("Status Code 400");
-    return;
+  if (!req.body.email || !req.body.password) {
+    res.send("Error: incomplete fields. Please return to the registration page and enter an email address and password to create an account.");
+  } else if (user) {
+    res.send("Error: account with email provided already exists. Please return to the registration page and enter a different email address or go to the login page and login to your account.")
   } else {
     users[generateUserId] = { id: generateUserId, 
       email: req.body.email, password: hashedPassword };
     req.session.user_id = generateUserId;
     res.redirect("/urls");
-    return;
   }
 });
 
@@ -132,20 +132,24 @@ app.get("/login", (req, res) => {
 app.post("/login", (req, res) => {
   let user = userLookup(req.body.email);
   let loginPassword = req.body.password;
-  let databasePassword = user.password;
-  let passwordComparer = bcrypt.compareSync(loginPassword, databasePassword);
-  //using bcrypt to compare loginPassword with the hashed databasePassword
 
-  if (!user) {
-    res.send("Status Code 403");
-    return;
-  } else if (req.body.email === user.email && passwordComparer === false) {
-    res.send("Status Code 403");
-    return;
-  } else {
-    req.session.user_id = user.id;
-    res.redirect("/urls");   
+  if (!req.body.email || !req.body.password) {
+    res.send("Error: incomplete fields. Please return to the login page and enter an email address and password to log in to your account.");
+  } else if (!user) {
+    res.send("Error: user account does not exist. Please go to the registration page to create an account.");
   }
+
+  if (req.body.email === user.email) {
+    let passwordComparer = bcrypt.compareSync(loginPassword, user.password); {
+    //using bcrypt to compare loginPassword with the hashed databasePassword  
+      if (passwordComparer === false) {
+        res.send("Error: incorrect password. Password entered does not match password associated with your account. Please return to the login page and enter a valid password to continue.");
+      } else if (passwordComparer === true)  {
+        req.session.user_id = user.id;
+        res.redirect("/urls");   
+      }
+  }
+}
 });
 
 //route to handle user logout
@@ -214,7 +218,7 @@ app.post("/urls/:shortURL", (req, res) => {
       urlDatabase[req.params.shortURL].longURL = req.body.longURL;
       res.redirect("/urls");
     } else {
-      res.send("Only URLs belonging to a User Can be Edited.");
+      res.send("This URL does not belong to you. Only URLs belonging to a User Can be Edited.");
   }
 });
 
@@ -227,7 +231,7 @@ app.post("/urls/:shortURL/delete", (req, res) => {
     delete urlDatabase[req.params.shortURL];
     res.redirect("/urls");
   } else {
-    res.send("Only URLs belonging to a User Can be Deleted.");
+    res.send("This URL does not belong to you. Only URLs belonging to a User Can be Deleted.");
   }
 });
 
