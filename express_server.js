@@ -50,7 +50,7 @@ const generateRandomString = function generateRandomStringtoUseForShortURL() {
 };
 
 const userLookup = function lookUpUserAndReturnFullProfile (loginEmail) {
-  for (var id in users) {
+  for (let id in users) {
     if (loginEmail === users[id].email) {
       return users[id];
     }
@@ -60,7 +60,7 @@ const userLookup = function lookUpUserAndReturnFullProfile (loginEmail) {
 
 //separate email and cookie functions needed based on type of information available to pass to function
 const cookieLookup = function checkIfCookieMatchesExistingUser (cookie) {
-  for (var id in users) {
+  for (let id in users) {
     if (cookie === users[id].id) {
       return users[id].id;
     }
